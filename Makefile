@@ -1,4 +1,6 @@
 ### docker
+# Полный цикл пересборки проекта
+init: down-clear build-pull up
 # Собрать контейнеры из образов
 build:
 	docker-compose build
@@ -11,7 +13,7 @@ up:
 # Перезапустить контейнеры
 restart:
 	docker-compose restart
-# Остановить и удалить контейнеры
+# Остановить и удалить все контейнеры с префиксом php-template
 down:
 	docker-compose down --remove-orphans
 # Остановка, удаление контейнеров и удаление томов

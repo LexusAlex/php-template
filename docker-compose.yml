@@ -2,8 +2,8 @@ version: "3.7"
 services:
     nginx: # веб-сервер nginx
         build:
-            context: infrastructure
-            dockerfile: docker/nginx/Dockerfile
+            context: infrastructure/docker
+            dockerfile: development/nginx/Dockerfile
         ports:
             - "80:80"
         volumes:
@@ -12,14 +12,14 @@ services:
             - php-fpm
     php-fpm: # php для веб сервера
         build:
-            context: infrastructure
-            dockerfile: docker/php-fpm/Dockerfile
+            context: infrastructure/docker
+            dockerfile: development/php-fpm/Dockerfile
         volumes:
             - ./:/template
     php-cli: # php консольный вариант для технических целей
         build:
-            context: infrastructure
-            dockerfile: docker/php-cli/Dockerfile
+            context: infrastructure/docker
+            dockerfile: development/php-cli/Dockerfile
         volumes:
             - ./:/template
     mariadb:
@@ -29,7 +29,7 @@ services:
             MYSQL_DATABASE: template
         volumes:
             - mariadb:/var/lib/mysql
-            - ./infrastructure/docker/mariadb/conf.d/:/etc/mysql/conf.d/
+            - ./infrastructure/docker/development/mariadb/conf.d/:/etc/mysql/conf.d/
         ports:
             - "3306:3306"
 volumes:

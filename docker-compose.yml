@@ -10,7 +10,7 @@ services:
             - ./:/template
         depends_on:
             - php-fpm
-    php-fpm: # php для веб сервера
+    php-fpm: # php-fpm для веб сервера
         build:
             context: infrastructure/docker
             dockerfile: development/php-fpm/Dockerfile

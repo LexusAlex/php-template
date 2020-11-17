@@ -25,3 +25,9 @@ remove-all-system:
 # запуск команды в техническом контейнере для composer phpunit и др.
 php-cli:
 	docker-compose run --rm php-cli $(name)
+up-apache:
+	docker-compose -f docker-compose-apache.yml up -d
+down-apache:
+	docker-compose -f docker-compose-apache.yml down --remove-orphans
+build-apache:
+	docker-compose -f docker-compose-apache.yml build

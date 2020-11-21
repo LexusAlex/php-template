@@ -1,19 +1,19 @@
 version: "3.7"
 services:
-  apache: # веб-сервер apache
+  apache-alpine: # веб-сервер apache
     build:
-      context: infrastructure/docker
-      dockerfile: development/apache/Dockerfile
+      context: ./infrastructure/docker/development/apache-alpine
+      dockerfile: Dockerfile
     ports:
       - "80:80"
     volumes:
       - ./:/usr/local/apache2/htdocs/
     depends_on:
-      - php-fpm
+      - php-fpm-alpine
 
-  php-fpm: # php-fpm для веб сервера
+  php-fpm-alpine: # php-fpm для веб сервера
     build:
-      context: infrastructure/docker
-      dockerfile: development/php-fpm/Dockerfile
+      context: ./infrastructure/docker/development/php-fpm-alpine
+      dockerfile: Dockerfile
     volumes:
       - ./:/template

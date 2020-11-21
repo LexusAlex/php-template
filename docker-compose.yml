@@ -1,36 +1,36 @@
 version: "3.7"
 services:
-    nginx: # веб-сервер nginx
+    nginx-alpine: # веб-сервер nginx
         build:
-            context: infrastructure/docker
-            dockerfile: development/nginx/Dockerfile
+            context: ./infrastructure/docker/development/nginx-alpine
+            dockerfile: Dockerfile
         ports:
             - "80:80"
         volumes:
             - ./:/template
         depends_on:
-            - php-fpm
-    php-fpm: # php-fpm для веб сервера
+            - php-fpm-alpine
+    php-fpm-alpine: # php-fpm для веб сервера
         build:
-            context: infrastructure/docker
-            dockerfile: development/php-fpm/Dockerfile
+            context: ./infrastructure/docker/development/php-fpm-alpine
+            dockerfile: Dockerfile
         volumes:
             - ./:/template
-    php-cli: # php консольный вариант для технических целей
+    php-cli-alpine: # php консольный вариант для технических целей
         build:
-            context: infrastructure/docker
-            dockerfile: development/php-cli/Dockerfile
+            context: ./infrastructure/docker/development/php-cli-alpine
+            dockerfile: Dockerfile
         volumes:
             - ./:/template
-    mariadb:
+    mariadb-ubuntu:
         image: mariadb:10 # база данных mariadb
         environment:
             MYSQL_ROOT_PASSWORD: template
             MYSQL_DATABASE: template
         volumes:
-            - mariadb:/var/lib/mysql
-            - ./infrastructure/docker/development/mariadb/conf.d/:/etc/mysql/conf.d/
+            - mariadb-ubuntu:/var/lib/mysql
+            - ./infrastructure/docker/development/mariadb-ubuntu/conf.d/:/etc/mysql/conf.d/
         ports:
             - "3306:3306"
 volumes:
-    mariadb:
+    mariadb-ubuntu:

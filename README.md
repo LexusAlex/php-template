@@ -9,12 +9,12 @@
 
 ## Состав
 В образах всегда нужно указывать конкретную версию образа.
-При сборке выбираем нужный пакет.
 Любой пакет можно заменить любым.
+Преимущество докера в том, что можно моделировать реальное окружение.
 
 Сборка 1.
 
-nginx + php-fpm docker-compose.yml
+nginx + php-fpm alpine docker-compose.yml
 1. nginx:1.19-alpine
 2. php:7.4-fpm-alpine
 3. php:7.4-cli-alpine
@@ -30,17 +30,27 @@ make down - остановка контейнеров
 
 Сборка 2.
 
-apache + php-fpm docker-compose-apache.yml
+apache + php-fpm docker-compose-apache-alpine.yml
 1. httpd:2.4-alpine
 2. php:7.4-fpm-alpine
 
 ## Использование
 ```
-make build-apache - собрать контейнеры из образов
-make up-apache - запуск контейнеров
-make down-apache - остановка контейнеров
+make build-apache-alpine - собрать контейнеры из образов
+make up-apache-alpine - запуск контейнеров
+make down-apache-alpine - остановка контейнеров
 ```
+Сборка 3.
+nginx + php-fpm debian docker-compose-nginx-debian.yml
+1. nginx:1.19
+2. php:7.4-fpm
 
+## Использование
+```
+make build-nginx-debian - собрать контейнеры из образов
+make up-nginx-debian - запуск контейнеров
+make down-nginx-debian - остановка контейнеров
+```
 Запуск команды в техническом контейнере:
 1. make php-cli name=composer
 2. make php-cli name='php -v'

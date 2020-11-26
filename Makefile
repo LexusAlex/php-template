@@ -24,7 +24,9 @@ remove-all-system:
 	docker system prune -a
 # запуск команды в техническом контейнере для composer phpunit и др.
 php-cli:
-	docker-compose run --rm php-cli $(name)
+	docker-compose run --rm php-cli-alpine $(name)
+run-test:
+	docker-compose run --rm php-cli-alpine composer test
 up-apache-alpine:
 	docker-compose -f docker-compose-apache-alpine.yml up -d
 down-apache-alpine:

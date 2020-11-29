@@ -1,8 +1,14 @@
 # Шаблон для php проектов
 
 Структура:
-/infrastructure - файлы для запуска приложения
+
+/infrastructure - файлы инфраструктуры для запуска приложения
+
 /public - корень
+
+/src - файлы приложения
+
+/tests - тесты
 
 Построен на [docker](https://www.docker.com/get-started) что подразумевает под собой
 запуска отдельного процесса в контейнере.
@@ -52,6 +58,16 @@ make up-nginx-debian - запуск контейнеров
 make down-nginx-debian - остановка контейнеров
 ```
 Запуск команды в техническом контейнере:
-1. make php-cli name=composer
-2. make php-cli name='php -v'
-3. make php-cli name='composer require slim/slim slim/psr7'
+1. make php-cli-alpine name=composer
+2. make php-cli-alpine name='php -v'
+3. make php-cli-alpine name='composer require slim/slim slim/psr7'
+
+## Тесты
+
+Запуск тестов phpunit. Все способы эквивалентны
+
+```
+make phpunit
+docker-compose run --rm php-cli-alpine composer test
+docker-compose run --rm php-cli-alpine ./vendor/bin/phpunit
+```

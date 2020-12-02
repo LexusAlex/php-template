@@ -39,3 +39,7 @@ up-nginx-debian:
 	docker-compose -f docker-compose-nginx-debian.yml up -d
 down-nginx-debian:
 	docker-compose -f docker-compose-nginx-debian.yml down --remove-orphans
+up-nginx-alpine-php8:
+	docker-compose -f docker-compose-nginx-alpine-php8.yml up -d
+down-nginx-alpine-php8:
+	docker-compose -f docker-compose-nginx-alpine-php8.yml down --remove-orphans

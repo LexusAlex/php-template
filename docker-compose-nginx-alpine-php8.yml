@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  nginx-alpine-php8: # веб-сервер nginx
+    build:
+      context: ./infrastructure/docker/development/nginx-alpine-php8
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/template
+    depends_on:
+      - php8-fpm-alpine
+
+  php8-fpm-alpine: # php-fpm для веб сервера
+    build:
+      context: ./infrastructure/docker/development/php8-fpm-alpine
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/template

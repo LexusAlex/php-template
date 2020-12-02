@@ -57,6 +57,17 @@ make build-nginx-debian - собрать контейнеры из образо�
 make up-nginx-debian - запуск контейнеров
 make down-nginx-debian - остановка контейнеров
 ```
+Сборка 4.
+nginx + php8-fpm alpine docker-compose-nginx-alpine-php8.yml
+1. nginx:1.19-apline
+2. php:8.0-fpm-alpine
+
+## Использование
+```
+make up-nginx-alpine-php8 - запуск контейнеров
+make down-nginx-alpine-php8 - остановка контейнеров
+```
+
 Запуск команды в техническом контейнере:
 1. make php-cli-alpine name=composer
 2. make php-cli-alpine name='php -v'

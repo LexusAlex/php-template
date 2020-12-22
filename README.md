@@ -70,9 +70,19 @@ make down-nginx-alpine-php8 - остановка контейнеров
 
 Запуск команды в техническом контейнере:
 1. make php-cli-alpine name=composer
-2. make php-cli-alpine name='php -v'
+2. make php-cli-alpine name='php
+ -v'
 3. make php-cli-alpine name='composer require slim/slim slim/psr7'
 
+Сборка 5.
+Базы данных
+docker-compose-db.yml postgres mariadb
+
+## Использование
+```
+make up-db - запуск контейнеров
+make down-db - остановка контейнеров
+```
 ## Тесты
 
 Запуск тестов phpunit. Все способы эквивалентны

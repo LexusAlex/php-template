@@ -43,3 +43,7 @@ up-nginx-alpine-php8:
 	docker-compose -f docker-compose-nginx-alpine-php8.yml up -d
 down-nginx-alpine-php8:
 	docker-compose -f docker-compose-nginx-alpine-php8.yml down --remove-orphans
+up-db:
+	docker-compose -f docker-compose-db.yml up -d
+down-db:
+	docker-compose -f docker-compose-db.yml down --remove-orphans

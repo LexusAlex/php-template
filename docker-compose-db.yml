@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+  postgres-alpine:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: template
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: template
+    volumes:
+      - postgres-alpine:/var/lib/postgresql/data
+    ports:
+      - "54321:5432"
+  mariadb-ubuntu:
+    image: mariadb:10
+    environment:
+      MYSQL_ROOT_PASSWORD: template
+      MYSQL_DATABASE: template_prod
+    volumes:
+      - mariadb-ubuntu:/var/lib/mysql
+      - ./infrastructure/docker/development/mariadb-ubuntu/conf.d/:/etc/mysql/conf.d/
+    ports:
+      - "33066:3306"
+volumes:
+  postgres-alpine:
+  mariadb-ubuntu:

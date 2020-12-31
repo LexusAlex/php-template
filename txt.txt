@@ -1,0 +1,156 @@
+Строим проект на php
+
+Структура проекта :
+1. Инфраструктура, стек и окружение docker
+    Установка https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+    Опции после установки https://docs.docker.com/engine/install/linux-postinstall
+    .env
+    COMPOSE_PROJECT_NAME=site
+    К контейнерам можно обращаться по имени
+2. Запуск команды в техническом контейнере
+    make php-cli name=composer
+    make php-cli name='php -v'
+    make php-cli name='composer require slim/slim slim/psr7'
+    docker-compose run --rm php-cli
+3. Доступ к бд
+    хост: 127.0.0.1
+    логин: root
+    пароль: template
+    бд: template
+
+   Смотреть Елисеева
+4. Продакшен окружение/ Потом завершить
+5. Сделать независимое от докера развертывание
+docker exec -it php-template_apache_1_7bdb0c1aab86 /bin/ash
+
+https://habr.com/ru/company/southbridge/blog/528206/
+
+yii2 создание приложения с нуля
+https://www.yiiframework.com/doc/guide/2.0/ru/tutorial-yii-as-micro-framework
+
+yii2
+Запускаем на любом веб сервере, здесь не важно что использовать, я буду использовать докер
+создаем composer.json
+docker-compose run --rm php-cli composer init
+docker-compose run --rm php-cli-alpine composer require yiisoft/yii2
+
+composer.json
+{
+    "require": {
+        "yiisoft/yii2": "2.0.39.2"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+}
+
+index.php
+<?php
+
+// закомментируйте следующие две строки при использовании в рабочем режиме
+defined('YII_DEBUG') or define('YII_DEBUG', true);
+defined('YII_ENV') or define('YII_ENV', 'dev');
+
+require(__DIR__ . '/../vendor/autoload.php');
+require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
+
+$config = require __DIR__ . '/../yii2/config/web.php';
+(new yii\web\Application($config))->run();
+
+laravel
+
+docker-compose run --rm php-cli composer require laravel/laravel
+docker-compose run --rm php-cli composer dump-autoload
+docker-compose run --rm php-cli php ./laravel/artisan
+docker-compose run --rm php-cli composer create-project --prefer-dist laravel/laravel blog
+
+dd() встроенное форматирование кода в laravel
+
+{
+    "require": {
+        "laravel/laravel": "^8.4"
+    },
+    "autoload": {
+      "psr-4": {
+        "App\\": "laravel/app/"
+      }
+    }
+}
+
+
+index.php
+
+<?php
+
+use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Http\Request;
+
+define('LARAVEL_START', microtime(true));
+
+require __DIR__.'/../vendor/autoload.php';
+
+$app = require_once __DIR__.'/../laravel/bootstrap/app.php';
+
+$kernel = $app->make(Kernel::class);
+
+// Обрабатываем запросы
+
+$response = tap($kernel->handle(
+    $request = Request::capture()
+))->send();
+
+$kernel->terminate($request, $response);
+
+GIT
+https://github.com/nicothin/web-development/tree/master/git
+
+PhpUnit
+docker-compose run --rm php-cli-alpine composer require --dev phpunit/phpunit
+docker-compose run --rm php-cli-alpine composer dump-autoload
+docker-compose run --rm php-cli-alpine /vendor/bin/phpunit --generate-configuration
+
+docker-compose run --rm php-cli-alpine ./vendor/bin/phpunit tests/MethodsTest.php
+Добавление phpunit.xml
+
+Ansible установка на локальный компьютер
+
+$ sudo apt update
+$ sudo apt install software-properties-common
+$ sudo apt-add-repository --yes --update ppa:ansible/ansible
+$ sudo apt install ansible
+
+ansible-playbook -i infrastructure/provisioning/hosts.yml infrastructure/provisioning/site.yml
+
+Исследование работы react
+
+1. Идемпотентная функция - при одних и тех же входных данных возвращает один и тот же результ
+2. Если название ключа в объекте js совпадает со значением то значение можно не писать
+
+
+нужно было сказать, что есть 2 метода добавления: append и appendChild. В первом можно добавить как Node узел, так и текст. В случае с appendChild можно добавить только Node. Так как мы с помощью append добавляем только Node, лучше использовать appendChild. Есть подозрения, что в этом случае интерпритатор не проверяет тип, что экономит время
+getElementByID устарел (хоть и работает). Для таких целей лучше использовать document.querySelector(), так будет понятнее для людей, кто пришел в профессию из верстки
+JavaScript инициализирует все функции перед выполнением кода только тогда, когда используется декларативное описание. При использовании Function Expression такой подход вызовет ошибку, ибо функция создается только в момент объявления
+
+2 урок - 37 минута
+
+
+db - docker pull postgres:13-alpine
+DB - миграции
+
+phinx Миграции БД
+https://github.com/cakephp/phinx
+https://book.cakephp.org/phinx/0/en/index.html
+docker-compose run --rm php-cli-alpine composer require robmorgan/phinx
+docker-compose run --rm php-cli-alpine composer phinx
+docker-compose run --rm php-cli-alpine composer phinx init
+
+Создание миграции
+make create-migration name=AddedTableMenu
+
+Добавление данных
+make added-data name=Data
+
+user: 1000:1000 права на файлы

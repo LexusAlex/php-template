@@ -1,0 +1,41 @@
+<?php
+
+return
+[
+    'paths' => [
+        'migrations' => '%%PHINX_CONFIG_DIR%%/db/migrations',
+        'seeds' => '%%PHINX_CONFIG_DIR%%/db/seeds'
+    ],
+    'environments' => [
+        'default_migration_table' => 'migrations',
+        'default_environment' => 'development',
+        'production' => [
+            'adapter' => 'mysql',
+            'host' => 'mariadb-ubuntu',
+            'name' => 'template',
+            'user' => 'root',
+            'pass' => 'template',
+            'port' => '3306',
+            'charset' => 'utf8',
+        ],
+        'development' => [
+            'adapter' => 'mysql',
+            'host' => 'mariadb-ubuntu',
+            'name' => 'template_dev',
+            'user' => 'root',
+            'pass' => 'template',
+            'port' => '3306',
+            'charset' => 'utf8',
+        ],
+        'testing' => [
+            'adapter' => 'mysql',
+            'host' => 'mariadb-ubuntu',
+            'name' => 'template_test',
+            'user' => 'root',
+            'pass' => 'template',
+            'port' => '3306',
+            'charset' => 'utf8',
+        ]
+    ],
+    'version_order' => 'creation'
+];

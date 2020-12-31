@@ -17,6 +17,7 @@ services:
         volumes:
             - ./:/template
     php-cli-alpine: # php консольный вариант для технических целей
+        user: 1000:1000
         build:
             context: ./infrastructure/docker/development/php-cli-alpine
             dockerfile: Dockerfile

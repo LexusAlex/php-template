@@ -27,7 +27,7 @@ services:
         image: mariadb:10 # база данных mariadb
         environment:
             MYSQL_ROOT_PASSWORD: template
-            MYSQL_DATABASE: template
+            MYSQL_DATABASE: template_dev
         volumes:
             - mariadb-ubuntu:/var/lib/mysql
             - ./infrastructure/docker/development/mariadb-ubuntu/conf.d/:/etc/mysql/conf.d/

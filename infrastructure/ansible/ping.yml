@@ -1,0 +1,19 @@
+- name: Ping
+  hosts: debian
+  become: yes
+
+  tasks:
+  - name: Task ping
+    ping:
+
+  - name: Update cache
+    apt:
+      update_cache: yes
+
+  - name: Upgrade
+    apt:
+      upgrade: yes
+  - name: Install web
+    apt:
+      pkg: apache2
+      state: present

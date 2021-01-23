@@ -124,6 +124,14 @@ $ sudo apt install ansible
 
 ansible-playbook -i infrastructure/provisioning/hosts.yml infrastructure/provisioning/site.yml
 
+ansible all -m ping - все хосты
+ansible debian -m ping - один хост
+ansible test -m ping - группа хостов
+
+ansible debian -m setup - информация о клиентах
+ansible debian -m shell -a "uptime" - запуск команды на хосте
+ansible debian -m file -a "/home/alex/test.txt state=touch"
+
 Исследование работы react
 
 1. Идемпотентная функция - при одних и тех же входных данных возвращает один и тот же результ
@@ -154,3 +162,151 @@ make create-migration name=AddedTableMenu
 make added-data name=Data
 
 user: 1000:1000 права на файлы
+
+docker-compose run --rm php-cli-alpine composer require --dev fzaninotto/faker
+
+/*
+
+$page = (isset($_GET['page'])) ? $_GET['page'] : 1;
+$limit = 5;
+$offset = $limit * ($page - 1);
+
+$connection = new \PDO('mysql:host=mariadb-ubuntu;dbname=template_dev;charset=utf8', 'root', 'template',[\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
+
+$result = $connection->query('SELECT * FROM notes_1 LIMIT '.$limit.' OFFSET '. $offset,PDO::FETCH_ASSOC)->fetchAll();
+
+echo '<pre>';
+print_r($result);
+*/
+
+$connection = new \PDO('mysql:host=mariadb-ubuntu;dbname=template_dev;charset=utf8', 'root', 'template',[\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
+
+// Всего записей
+$count_records = (int)$connection->query('SELECT COUNT(*) FROM notes_1',PDO::FETCH_ASSOC)->fetchColumn();
+// Текущая страница
+$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
+// Показывать записей на странице
+$view_records = 5;
+// C какой записи начать выборку
+$start_record = ($page - 1) * $view_records;
+// Получаем массив $result с результатом
+$result = $connection->query("SELECT * FROM notes_1 LIMIT $start_record, $view_records",PDO::FETCH_ASSOC)->fetchAll();
+// Всего страниц
+$count_pages = ceil($count_records/$view_records);
+// Количество ссылок навигации
+$count_show_links = 10;
+// URL
+$url = "/";
+// Ссылки в html
+$result_links = '';
+
+// Результат
+echo '<pre>';
+print_r($result);
+echo '</pre>';
+
+// Расчитываем первую, последнюю, следующую и предыдущую страницу
+$result_links .= "<div style='font-size: 20px'>";
+if ($page != 1) {
+    $result_links .= '<a href="'.$url.'" title="Первая страница">&lt;&lt; Первая</a>';
+}
+
+if ($page > 1) {
+    $result_links .= '<a href="'.$url.'?page='.($page - 1).'" title="Предыдущая страница">&lt; Предыдущая </a>';
+}
+
+// $pagesList - массив с чанками
+// $needPage - Здесь это наш GET - параметр (START)
+// Вернёт int - индекс нужного чанка:
+function searchPage( array $pagesList, /*int*/ $needPage )
+{
+    foreach( $pagesList AS $chunk => $pages  ){
+        if( in_array($needPage, $pages) ){
+            return $chunk;
+        }
+    }
+    return 0;
+}
+
+// Выводим ссылки на сами страницы
+for( $i = 0; $i < $count_pages; $i++) {
+    $pages[$i + 1] = $i * $view_records;
+}
+
+$allPages = array_chunk($pages, $count_show_links, true);
+
+$needChunk = searchPage( $allPages, $page);
+
+foreach($allPages[$needChunk] AS $pageNum => $offset )  {
+    // Делаем текущую страницу не активной (т.е. не ссылкой):
+    if( $offset == $page ) {
+        $result_links .= '<li><span>'. $pageNum .'</span></li>';
+        continue;
+    }
+    $result_links .= '<li><a href="'.$url.'?'.'page'.'='. $pageNum .'">'. $pageNum . '</a></li>';
+}
+
+//echo "<pre>";
+//print_r($allPages);
+/*
+for ($i = 1; $i <= ceil($count_records / $view_records); $i++) {
+    $result_links .= '<a href="'.$url.'?page='.$i.'">'.$i.'</a>';
+}
+*/
+
+
+if ($page != $count_pages) {
+    $result_links .= '<a href="'.$url.'?page='.($page + 1).'" title="Следующая страница">Следующая &gt;</a>';
+    $result_links .= '<a href="'.$url.'?page='.$count_pages.'" title="Последняя страница">Последняя &gt;&gt; </a>';
+}
+
+$result_links .= "</div>";
+/*
+// Расчитываем ссылки
+if ($count_pages > 1) {
+    if ( ($page - 1) < floor($count_show_links / 2)) {
+        $start_link = 1;
+    } else {
+        $start_link = ($page - 1) - floor($count_show_links / 2);
+    }
+
+    $end_link = $start_link + $count_show_links - 1;
+
+    if ($end_link > $count_pages) {
+        $start_link -= ($end_link - $count_pages);
+        $end_link = $count_pages;
+        if ($start_link < 1) {
+            $start_link = 1;
+        }
+    }
+}
+// Собираем результат
+echo '<pre>';
+print_r($result);
+echo '</pre>';
+$result_links = '';
+if ($page != 1) {
+    $result_links .= '<a href="'.$url.'" title="Первая страница">&lt;&lt;&nbsp;&nbsp;</a>';
+    if ($page == 2) {
+        $result_links .= '<a href="'.$url.'" title="Предыдущая страница">&lt;</a>';
+    } else {
+        $result_links .= '<a href="'.$url.'?page='.($page - 1).'" title="Предыдущая страница">&lt;&nbsp;&nbsp;</a>';
+    }
+    for ($i = $start_link; $i <= $end_link; $i++) {
+        if ($i == $page) {
+            $result_links .= "<span><?=$i?></span>";
+        } else {
+            if ($i == 1) {
+                $result_links .= '<a href="'.$url.'">'.$i.'</a>';
+            } else {
+                $result_links .= '<a href="'.$url.'?page='.$i.'">'.$i.'</a>';
+            }
+        }
+    }
+    if ($page != $count_pages) {
+        $result_links .= '<a href="'.$url.'?page='.($page + 1).'" title="Следующая страница">&nbsp;&nbsp;&gt;</a>';
+        $result_links .= '<a href="'.$url.'?page='.$count_pages.'" title="Последняя страница">&nbsp;&nbsp;&gt;&gt;</a>';
+    }
+}
+*/
+echo $result_links;
